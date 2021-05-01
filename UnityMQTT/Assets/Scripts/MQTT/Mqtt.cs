@@ -11,11 +11,12 @@ public class Mqtt :MonoBehaviour
     // Start is called before the first frame update
     public static MqttClient client;
     private string msg;
+    private const string IP = "192.168.178.178";
 
 
     void Start()
     {
-        client = new MqttClient("127.0.0.1");
+        client = new MqttClient(IP);
         client.MqttMsgPublishReceived += ReceiveMessage;
         client.Subscribe(new string[] { "Uno/" }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_LEAST_ONCE });
         client.Connect("Uno/#");
@@ -31,16 +32,22 @@ public class Mqtt :MonoBehaviour
         });
     }
 
+    internal void WaitForPlayer(string GameName)
+    {
+        client.Subscribe(new string[] { "Uno/"+GameName }, new byte[] { MqttMsgBase.QOS_LEVEL_AT_LEAST_ONCE });
+    }
+    private void WaitForPlayer(object sender, MqttMsgPublishEventArgs e)
+    {
+        Debug.Log("e.Message");
+    }
+
     internal void SubWaitForPlayers()
     {
         client.MqttMsgPublishReceived += WaitForPlayer;
     }
 
-    private void WaitForPlayer(object sender, MqttMsgPublishEventArgs e)
-    {
-        Debug.Log("Player joined the Room");
 
-    }
+    
 
 
 

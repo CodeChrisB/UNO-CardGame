@@ -9,6 +9,11 @@ public class MainMenu : MonoBehaviour
     public GameObject JoinedPlayerPanel;
     public GameObject PlayerText;
     public Button CreateButton;
+    Mqtt mqtt;
+    private void Awake()
+    {
+        mqtt = GameObject.Find("Mqtt").GetComponent<Mqtt>();
+    }
 
     public void OpenCreateLobbyPanel()
     {
@@ -18,12 +23,13 @@ public class MainMenu : MonoBehaviour
 
     public void CreateRoom()
     {
-        LeanTween.moveLocalX(CreatePanel, -2.8f, 0.3f);
+        LeanTween.moveLocalX(CreatePanel, 2.8f, 0.3f);
         LeanTween.scaleX(CreatePanel, 0.8f, 0.3f);
         JoinedPlayerPanel.SetActive(true);
         LeanTween.moveY(JoinedPlayerPanel, 0, 0.3f);
         CreateButton.interactable = false;
 
+        mqtt.WaitForPlayer("fdsa");
     }
 
     public void StartGame()
